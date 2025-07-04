@@ -4,6 +4,7 @@ Handles metadata extraction, ticket classification, and resolution generation us
 """
 
 import json
+import re
 from typing import Dict, List, Optional
 from database import SnowflakeConnection
 

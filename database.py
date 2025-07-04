@@ -5,6 +5,8 @@ Handles Snowflake connections and database queries.
 
 import snowflake.connector
 import pandas as pd
+import re
+import json
 from typing import List, Dict, Optional
 
 
@@ -127,12 +129,36 @@ class SnowflakeConnection:
                     match = re.search(r'(\{[\s\S]*\})', response_str)
                     if match:
                         response_str = match.group(1)
+
+                # Clean JSON by removing comments
+                response_str = self._clean_json_response(response_str)
                 return json.loads(response_str)
             except json.JSONDecodeError as e:
                 print(f"Error decoding LLM response JSON: {e}")
                 print(f"Raw LLM response: {results[0]['LLM_RESPONSE']}")
                 return None
         return None
+
+    def _clean_json_response(self, json_str: str) -> str:
+        """
+        Clean JSON response by removing comments and fixing common issues.
+
+        Args:
+            json_str (str): Raw JSON string that may contain comments
+
+        Returns:
+            str: Cleaned JSON string
+        """
+        # Remove single-line comments (// comment)
+        json_str = re.sub(r'//.*?(?=\n|$)', '', json_str)
+
+        # Remove multi-line comments (/* comment */)
+        json_str = re.sub(r'/\*.*?\*/', '', json_str, flags=re.DOTALL)
+
+        # Remove trailing commas before closing braces/brackets
+        json_str = re.sub(r',\s*([}\]])', r'\1', json_str)
+
+        return json_str.strip()
 
     def find_similar_tickets(self, search_conditions: List[str], params: List[str]) -> List[Dict]:
         """

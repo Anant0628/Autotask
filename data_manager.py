@@ -108,7 +108,8 @@ class DataManager:
             t = entry.get('new_ticket', {})
             c = t.get('classified_data', {})
             ticket = {
-                "id": t.get('title', '') + t.get('date', '') + t.get('time', ''),
+                "id": t.get('ticket_number', t.get('title', '') + t.get('date', '') + t.get('time', '')),
+                "ticket_number": t.get('ticket_number', 'N/A'),
                 "title": t.get('title', ''),
                 "description": t.get('description', ''),
                 "created_at": f"{t.get('date', '')}T{t.get('time', '')}",
@@ -116,7 +117,7 @@ class DataManager:
                 "priority": c.get('PRIORITY', {}).get('Label', 'Medium'),
                 "category": c.get('TICKETCATEGORY', {}).get('Label', 'General'),
                 "requester_name": t.get('name', ''),
-                "requester_email": "",  # Add if available
+                "requester_email": t.get('user_email', ''),
                 "requester_phone": "",  # Add if available
                 "company_id": "",       # Add if available
                 "device_model": "",     # Add if available

@@ -95,6 +95,12 @@ CHART_PRIORITY_COLORS = {
     "Desktop/User Down": "#6f42c1"
 }
 
+# Email Configuration (loaded from .env)
+EMAIL_ACCOUNT = os.getenv('EMAIL_ACCOUNT', 'rohankul2017@gmail.com')
+EMAIL_PASSWORD = os.getenv('SUPPORT_EMAIL_PASSWORD')
+IMAP_SERVER = os.getenv('IMAP_SERVER', 'imap.gmail.com')
+EMAIL_FOLDER = os.getenv('EMAIL_FOLDER', 'inbox')
+
 # Contact Information (loaded from .env)
 SUPPORT_PHONE = os.getenv('SUPPORT_PHONE', '9723100860')
-SUPPORT_EMAIL = os.getenv('SUPPORT_EMAIL', 'inquire@64-squares.com')
+SUPPORT_EMAIL = os.getenv('SUPPORT_EMAIL', 'rohankul2017@gmail.com')

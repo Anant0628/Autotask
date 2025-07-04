@@ -4,6 +4,9 @@ This is the main class that provides the same interface as the original monolith
 """
 
 import json
+import uuid
+import hashlib
+import os
 from datetime import datetime
 from typing import Dict, List, Optional
 
@@ -11,6 +14,7 @@ from database import SnowflakeConnection
 from data_manager import DataManager
 from ai_processor import AIProcessor
 from ticket_processor import TicketProcessor
+from notification_agent import NotificationAgent
 
 
 class IntakeClassificationAgent:
@@ -51,9 +55,74 @@ class IntakeClassificationAgent:
         # Initialize ticket processor
         self.ticket_processor = TicketProcessor(self.data_manager.reference_data)
 
+        # Initialize notification agent
+        self.notification_agent = NotificationAgent()
+
         # Expose connection and reference data for backward compatibility
         self.conn = self.db_connection.conn
         self.reference_data = self.data_manager.reference_data
+
+    def generate_ticket_number(self, ticket_data: Dict) -> str:
+        """
+        Generate a unique ticket number in format T20240916.0057
+
+        Args:
+            ticket_data (dict): Ticket information
+
+        Returns:
+            str: Unique ticket number in format TYYYYMMDD.NNNN
+        """
+        # Get current timestamp
+        now = datetime.now()
+        date_part = now.strftime("%Y%m%d")
+
+        # Get next sequential number for today
+        sequence_number = self._get_next_sequence_number(date_part)
+
+        # Generate ticket number: TYYYYMMDD.NNNN
+        ticket_number = f"T{date_part}.{sequence_number:04d}"
+
+        print(f"Generated ticket number: {ticket_number}")
+        return ticket_number
+
+    def _get_next_sequence_number(self, date_part: str) -> int:
+        """
+        Get the next sequential number for the given date.
+
+        Args:
+            date_part (str): Date in YYYYMMDD format
+
+        Returns:
+            int: Next sequential number
+        """
+        sequence_file = "ticket_sequence.json"
+
+        # Load existing sequence data
+        sequence_data = {}
+        if os.path.exists(sequence_file):
+            try:
+                with open(sequence_file, 'r') as f:
+                    sequence_data = json.load(f)
+            except (json.JSONDecodeError, FileNotFoundError):
+                sequence_data = {}
+
+        # Get current sequence for this date, default to 0
+        current_sequence = sequence_data.get(date_part, 0)
+
+        # Increment sequence
+        next_sequence = current_sequence + 1
+
+        # Update sequence data
+        sequence_data[date_part] = next_sequence
+
+        # Save updated sequence data
+        try:
+            with open(sequence_file, 'w') as f:
+                json.dump(sequence_data, f, indent=2)
+        except Exception as e:
+            print(f"Warning: Could not save sequence file: {e}")
+
+        return next_sequence
 
     def extract_metadata(self, title: str, description: str, model: str = 'llama3-8b') -> Optional[Dict]:
         """
@@ -89,8 +158,8 @@ class IntakeClassificationAgent:
         self.data_manager.save_to_knowledgebase(new_ticket_full_data, similar_tickets_metadata)
 
     def process_new_ticket(self, ticket_name: str, ticket_description: str, ticket_title: str,
-                          due_date: str, priority_initial: str, extract_model: str = 'llama3-8b',
-                          classify_model: str = 'mixtral-8x7b') -> Optional[Dict]:
+                          due_date: str, priority_initial: str, user_email: Optional[str] = None,
+                          extract_model: str = 'llama3-8b', classify_model: str = 'mixtral-8x7b') -> Optional[Dict]:
         """
         Orchestrates the entire process for a new incoming ticket.
 
@@ -100,6 +169,7 @@ class IntakeClassificationAgent:
             ticket_title (str): Title of the ticket.
             due_date (str): Due date for the ticket (e.g., "YYYY-MM-DD").
             priority_initial (str): Initial priority set by the user (e.g., "Medium").
+            user_email (str, optional): User's email address for notifications.
             extract_model (str): Model to use for metadata extraction.
             classify_model (str): Model to use for classification.
 
@@ -121,6 +191,9 @@ class IntakeClassificationAgent:
             "due_date": due_date,
             "priority": priority_initial
         }
+
+        # Generate unique ticket number
+        ticket_number = self.generate_ticket_number(new_ticket_raw)
 
         # Extract metadata
         extracted_metadata = self.extract_metadata(ticket_title, ticket_description, model=extract_model)
@@ -158,6 +231,8 @@ class IntakeClassificationAgent:
         # Prepare final ticket data
         final_ticket_data = {
             **new_ticket_raw,
+            "ticket_number": ticket_number,
+            "user_email": user_email if user_email and user_email.strip() else "",
             "extracted_metadata": extracted_metadata,
             "classified_data": classified_data,
             "resolution_note": resolution_note
@@ -184,5 +259,18 @@ class IntakeClassificationAgent:
         # Save to knowledge base
         self.save_to_knowledgebase(final_ticket_data, similar_tickets_for_kb)
 
-        print("\n--- Ticket Processing Complete ---")
+        # Send notification email if user email is provided
+        if user_email and user_email.strip():
+            print(f"\n--- Sending Confirmation Email to {user_email} ---")
+            email_sent = self.notification_agent.send_ticket_confirmation(
+                user_email=user_email,
+                ticket_data=final_ticket_data,
+                ticket_number=ticket_number
+            )
+            if email_sent:
+                print("✅ Confirmation email sent successfully")
+            else:
+                print("❌ Failed to send confirmation email")
+
+        print(f"\n--- Ticket Processing Complete (#{ticket_number}) ---")
         return final_ticket_data
