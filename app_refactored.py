@@ -3,6 +3,9 @@ Refactored TeamLogic-AutoTask Application
 Main entry point that orchestrates all modular components.
 """
 
+import warnings
+warnings.filterwarnings("ignore", message="You have an incompatible version of 'pyarrow' installed")
+
 import streamlit as st
 import json
 import os
@@ -17,8 +20,9 @@ from email.header import decode_header
 from email.utils import parsedate_to_datetime, parseaddr
 import pytz
 import re
-import dateparser
-from dateparser.search import search_dates
+import threading
+import time
+import schedule
 
 # Import modular components
 from config import *
@@ -26,18 +30,43 @@ from intake_agent import IntakeClassificationAgent
 from data_manager import DataManager
 from ui_components import apply_custom_css, create_sidebar, format_time_elapsed, format_date_display, get_duration_icon
 
-# Email integration config
-EMAIL_ACCOUNT = 'rohankul2017@gmail.com'  # Set to your support email
+# Email integration config (based on test.py)
+EMAIL_ACCOUNT = 'rohankul2017@gmail.com'
 EMAIL_PASSWORD = os.getenv('SUPPORT_EMAIL_PASSWORD')
 IMAP_SERVER = 'imap.gmail.com'
 FOLDER = 'inbox'
 DEFAULT_TZ = 'Asia/Kolkata'
-MAX_EMAILS = 50
-MINUTES_BACK = 180
+MAX_EMAILS = 20  # Increased slightly for 5-minute window
+RECENT_MINUTES = 5  # Only process emails from last 5 minutes
 DEFAULT_DUE_OFFSET_HOURS = 48
 IST = pytz.timezone(DEFAULT_TZ)
-now = datetime.now(IST)
-cutoff_time = now - timedelta(minutes=MINUTES_BACK)
+
+# Global variables for automatic email processing
+AUTO_EMAIL_PROCESSOR = None
+EMAIL_PROCESSING_STATUS = {
+    "is_running": False,
+    "last_processed": None,
+    "total_processed": 0,
+    "error_count": 0,
+    "recent_logs": []
+}
+
+def validate_email(email_address: str) -> bool:
+    """
+    Validate email address format using regex.
+
+    Args:
+        email_address (str): Email address to validate
+
+    Returns:
+        bool: True if email format is valid, False otherwise
+    """
+    if not email_address or not email_address.strip():
+        return True  # Empty email is allowed (optional field)
+
+    # Basic email regex pattern
+    email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    return re.match(email_pattern, email_address.strip()) is not None
 
 @st.cache_resource
 def get_agent(account, user, password, warehouse, database, schema, role, passcode, data_ref):
@@ -63,104 +92,509 @@ def get_agent(account, user, password, warehouse, database, schema, role, passco
         st.exception(e)
         return None
 
-def fetch_and_process_emails(agent):
-    """Fetch unseen emails, create tickets, and return a summary."""
-    processed = []
+def connect_email():
+    """Connect to email server using IMAP."""
+    mail = imaplib.IMAP4_SSL(IMAP_SERVER)
+    mail.login(EMAIL_ACCOUNT, EMAIL_PASSWORD)
+    mail.select(FOLDER)
+    return mail
+
+def should_process_as_ticket(msg):
+    """Determine if an email should be processed as a support ticket."""
     try:
-        mail = imaplib.IMAP4_SSL(IMAP_SERVER)
-        mail.login(EMAIL_ACCOUNT, EMAIL_PASSWORD)
-        mail.select(FOLDER)
-        status, messages = mail.search(None, 'UNSEEN')
+        # Extract subject and sender
+        subject, encoding = decode_header(msg.get("Subject"))[0]
+        subject = subject.decode(encoding or "utf-8") if isinstance(subject, bytes) else subject or ""
+        from_ = msg.get("From") or ""
+
+        # Skip common non-support email patterns
+        skip_patterns = [
+            # Marketing/Newsletter patterns
+            'unsubscribe', 'newsletter', 'promotion', 'offer', 'deal', 'sale', 'discount',
+            'marketing', 'campaign', 'advertisement', 'noreply', 'no-reply',
+
+            # Job/Career patterns
+            'job alert', 'hiring', 'career', 'naukri', 'indeed', 'linkedin',
+            'internship', 'placement', 'recruitment',
+
+            # Social/Review patterns
+            'google maps', 'review', 'rating', 'social', 'facebook', 'twitter',
+            'instagram', 'youtube', 'notification',
+
+            # Travel/Booking patterns
+            'booking', 'travel', 'hotel', 'flight', 'vacation', 'trip',
+            'redbus', 'makemytrip', 'goibibo',
+
+            # Educational patterns (unless it's a technical issue)
+            'course', 'training', 'certification', 'nptel', 'coursera',
+            'udemy', 'internshala trainings'
+        ]
+
+        # Support ticket indicators
+        support_patterns = [
+            # Technical issues
+            'error', 'issue', 'problem', 'bug', 'crash', 'fail', 'not working',
+            'cannot', 'unable', 'help', 'support', 'assistance', 'urgent',
+
+            # System/Network issues
+            'vpn', 'network', 'connection', 'server', 'database', 'system',
+            'login', 'password', 'access', 'permission', 'timeout',
+
+            # Application issues
+            'outlook', 'excel', 'word', 'teams', 'software', 'application',
+            'program', 'install', 'update', 'sync',
+
+            # Hardware issues
+            'printer', 'computer', 'laptop', 'monitor', 'keyboard', 'mouse'
+        ]
+
+        # Check if email has image attachments (likely support tickets)
+        has_images = False
+        if msg.is_multipart():
+            for part in msg.walk():
+                if part.get_content_type().startswith("image/"):
+                    has_images = True
+                    break
+
+        # If it has images, likely a support ticket (screenshots)
+        if has_images:
+            return True
+
+        # Check subject and sender for patterns
+        text_to_check = f"{subject} {from_}".lower()
+
+        # Skip if matches skip patterns
+        for pattern in skip_patterns:
+            if pattern in text_to_check:
+                return False
+
+        # Process if matches support patterns
+        for pattern in support_patterns:
+            if pattern in text_to_check:
+                return True
+
+        # Default: skip emails that don't clearly look like support tickets
+        return False
+
+    except Exception:
+        # When in doubt, process it
+        return True
+
+def fetch_and_process_emails(agent):
+    """Fetch and process emails from last 5 minutes only, create tickets, and return a summary."""
+    processed = []
+
+    # Check if email credentials are configured
+    if not EMAIL_PASSWORD:
+        return "❌ Email password not configured. Please set SUPPORT_EMAIL_PASSWORD in environment variables."
+
+    try:
+        print("🔍 Connecting to email server...")
+        mail = connect_email()
+
+        # Search for very recent emails (last 5 minutes) - both seen and unseen for testing
+        from datetime import datetime, timedelta
+        cutoff_time = datetime.now() - timedelta(minutes=RECENT_MINUTES)
+        cutoff_date = cutoff_time.strftime("%d-%b-%Y")
+
+        print(f"📧 Fetching emails from last {RECENT_MINUTES} minutes (since {cutoff_time.strftime('%H:%M')})...")
+
+        # Get all recent emails (both seen and unseen) for better testing
+        # In production, you might want to use only UNSEEN
+        status, messages = mail.search(None, f'(SINCE {cutoff_date})')
         email_ids = messages[0].split()
-        for email_id in reversed(email_ids[-MAX_EMAILS:]):
-            status, msg_data = mail.fetch(email_id, "(RFC822)")
-            for response_part in msg_data:
-                if isinstance(response_part, tuple):
-                    msg = email.message_from_bytes(response_part[1])
-                    email_date = msg.get("Date")
-                    received_dt = parsedate_to_datetime(email_date).astimezone(IST)
-                    if received_dt < cutoff_time:
-                        continue
-                    subject, encoding = decode_header(msg.get("Subject"))[0]
-                    subject = subject.decode(encoding or "utf-8") if isinstance(subject, bytes) else subject
-                    from_ = msg.get("From")
-                    name, addr = parseaddr(from_)
-                    body = ""
-                    if msg.is_multipart():
-                        for part in msg.walk():
-                            if part.get_content_type() == "text/plain" and not part.get("Content-Disposition"):
-                                body = part.get_payload(decode=True).decode(errors="ignore")
-                                break
-                    else:
-                        body = msg.get_payload(decode=True).decode(errors="ignore")
-                    full_text = f"{subject}\n{body}"
-                    # --- NLP due date extraction ---
-                    def extract_due_date_nlp(text, received_dt):
-                        text = text.lower()
-                        if "tomorrow" in text:
-                            result = received_dt + timedelta(days=1)
-                            return result.strftime('%Y-%m-%d')
-                        match_next_day = re.search(r'next\\s+(monday|tuesday|wednesday|thursday|friday|saturday|sunday)', text)
-                        if match_next_day:
-                            weekday_str = match_next_day.group(1)
-                            weekday_target = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].index(weekday_str)
-                            days_ahead = (weekday_target - received_dt.weekday() + 7) % 7
-                            days_ahead = 7 if days_ahead == 0 else days_ahead
-                            result = received_dt + timedelta(days=days_ahead)
-                            return result.strftime('%Y-%m-%d')
-                        match_working = re.search(r'(?:in|within)\\s+(\\d{1,2})\\s+working\\s+days?', text)
-                        if match_working:
-                            days = int(match_working.group(1))
-                            added = 0
-                            current = received_dt
-                            while added < days:
-                                current += timedelta(days=1)
-                                if current.weekday() < 5:
-                                    added += 1
-                            return current.strftime('%Y-%m-%d')
-                        parsed_results = search_dates(
-                            text,
-                            settings={
-                                'RELATIVE_BASE': received_dt,
-                                'PREFER_DATES_FROM': 'future',
-                                'TIMEZONE': DEFAULT_TZ,
-                                'RETURN_AS_TIMEZONE_AWARE': True
-                            }
-                        )
-                        if parsed_results:
-                            for phrase, dt in parsed_results:
-                                if dt > received_dt:
-                                    return dt.strftime('%Y-%m-%d')
-                        match_window = re.search(r'after\\s+(\\d{1,2})[-/](\\d{1,2})[-/](\\d{4})\\s+and\\s+before\\s+(\\d{1,2})[-/](\\d{1,2})[-/](\\d{4})', text)
-                        if match_window:
-                            d1, m1, y1, d2, m2, y2 = map(int, match_window.groups())
+
+        if not email_ids:
+            print(f"✅ No emails found since {cutoff_date}.")
+            mail.logout()
+            return processed
+
+        # Initialize image processor quietly
+        try:
+            from image_processor import ImageProcessor
+            image_processor = ImageProcessor()
+        except ImportError:
+            image_processor = None
+
+        # Filter emails by actual receive time (last 5 minutes)
+        recent_email_ids = []
+        cutoff_time = datetime.now() - timedelta(minutes=RECENT_MINUTES)
+
+        for email_id in reversed(email_ids):  # Start with most recent
+            try:
+                # Get email date without processing the full message
+                status, msg_data = mail.fetch(email_id, "(RFC822)")
+                for response_part in msg_data:
+                    if isinstance(response_part, tuple):
+                        msg = email.message_from_bytes(response_part[1])
+                        email_date = msg.get("Date")
+
+                        if email_date:
                             try:
-                                start = datetime(y1, m1, d1, tzinfo=received_dt.tzinfo)
-                                end = datetime(y2, m2, d2, tzinfo=received_dt.tzinfo)
-                                mid = start + (end - start) / 2
-                                return mid.strftime('%Y-%m-%d')
-                            except:
-                                pass
-                        fallback = received_dt + timedelta(hours=DEFAULT_DUE_OFFSET_HOURS)
-                        return fallback.strftime('%Y-%m-%d')
-                    due_date = extract_due_date_nlp(full_text, received_dt)
-                    result = agent.process_new_ticket(
-                        ticket_name=name or addr,
-                        ticket_description=body.strip(),
-                        ticket_title=subject.strip(),
-                        due_date=due_date,
-                        priority_initial='Medium'
-                    )
-                    processed.append({
-                        'from': name or addr,
-                        'subject': subject.strip(),
-                        'due_date': due_date
-                    })
+                                received_dt = parsedate_to_datetime(email_date)
+                                # Convert to local timezone for comparison
+                                if received_dt.tzinfo is None:
+                                    received_dt = received_dt.replace(tzinfo=IST)
+                                else:
+                                    received_dt = received_dt.astimezone(IST)
+
+                                # Only include emails from last 5 minutes
+                                if received_dt >= cutoff_time.replace(tzinfo=IST):
+                                    recent_email_ids.append((email_id, msg, received_dt))
+                            except Exception:
+                                # If we can't parse date, include it to be safe
+                                recent_email_ids.append((email_id, msg, None))
+                        break
+            except Exception:
+                continue
+
+        if not recent_email_ids:
+            mail.logout()
+            return processed
+
+        print(f"📧 Processing {len(recent_email_ids)} recent emails...")
+
+        for email_id, msg, received_dt in recent_email_ids:
+            try:
+                # Quick filter: Only process emails that look like support tickets
+                if should_process_as_ticket(msg):
+                    # Process email with or without images
+                    email_result = process_email_with_images(msg, agent, image_processor)
+
+                    if email_result:
+                        # Add timestamp info
+                        if received_dt:
+                            email_result['received_time'] = received_dt.strftime('%H:%M:%S')
+                        processed.append(email_result)
+                        print(f"✅ Processed: {email_result.get('subject', 'No subject')}")
+
+                # Check if email was already seen before marking
+                flags_status, flags_data = mail.fetch(email_id, "(FLAGS)")
+                flags = flags_data[0].decode() if flags_data and flags_data[0] else ""
+                was_unseen = "\\Seen" not in flags
+
+                # Only mark as seen if it was previously unseen
+                if was_unseen:
                     mail.store(email_id, '+FLAGS', '\\Seen')
+
+            except Exception:
+                continue
+
         mail.logout()
+        if processed:
+            print(f"✅ Completed processing {len(processed)} emails")
+
     except Exception as e:
-        return f"Error: {e}"
+        error_msg = f"❌ Email processing error: {e}"
+        print(error_msg)
+        return error_msg
+
     return processed
+
+def log_email_status(level, message):
+    """Log email processing status"""
+    global EMAIL_PROCESSING_STATUS
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    log_entry = {
+        "timestamp": timestamp,
+        "level": level,
+        "message": message
+    }
+    EMAIL_PROCESSING_STATUS["recent_logs"].append(log_entry)
+
+    # Keep only last 20 log entries
+    if len(EMAIL_PROCESSING_STATUS["recent_logs"]) > 20:
+        EMAIL_PROCESSING_STATUS["recent_logs"] = EMAIL_PROCESSING_STATUS["recent_logs"][-20:]
+
+def automatic_email_processing_job(agent):
+    """Job function that runs every 5 minutes to process emails from last 5 minutes only"""
+    global EMAIL_PROCESSING_STATUS
+
+    try:
+        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        print(f"\n🔄 [{current_time}] Auto processing emails from last {RECENT_MINUTES} minutes...")
+        log_email_status("INFO", f"Processing emails from last {RECENT_MINUTES} minutes")
+
+        # Process emails
+        results = fetch_and_process_emails(agent)
+
+        if isinstance(results, str):
+            # Error occurred
+            print(f"❌ Email processing error: {results}")
+            EMAIL_PROCESSING_STATUS["error_count"] += 1
+            log_email_status("ERROR", results)
+        elif isinstance(results, list):
+            # Success
+            processed_count = len(results)
+            EMAIL_PROCESSING_STATUS["total_processed"] += processed_count
+            EMAIL_PROCESSING_STATUS["last_processed"] = current_time
+
+            if processed_count > 0:
+                print(f"✅ Auto-processed {processed_count} new emails")
+                log_email_status("SUCCESS", f"Processed {processed_count} emails")
+
+                # Update session state if available
+                if 'auto_processed_emails' not in st.session_state:
+                    st.session_state.auto_processed_emails = []
+                st.session_state.auto_processed_emails.extend(results)
+
+                # Keep only last 50 processed emails in session
+                if len(st.session_state.auto_processed_emails) > 50:
+                    st.session_state.auto_processed_emails = st.session_state.auto_processed_emails[-50:]
+            else:
+                print("📭 No new emails to auto-process")
+                log_email_status("INFO", "No new emails found")
+
+    except Exception as e:
+        print(f"❌ Error in automatic email processing: {e}")
+        EMAIL_PROCESSING_STATUS["error_count"] += 1
+        log_email_status("ERROR", str(e))
+
+def start_automatic_email_processing(agent):
+    """Start automatic email processing every 5 minutes"""
+    global AUTO_EMAIL_PROCESSOR, EMAIL_PROCESSING_STATUS
+
+    if EMAIL_PROCESSING_STATUS["is_running"]:
+        return "⚠️ Automatic email processing is already running"
+
+    try:
+        # Clear previous schedule
+        schedule.clear()
+
+        # Schedule the job to run every 5 minutes
+        schedule.every(5).minutes.do(automatic_email_processing_job, agent)
+
+        # Run once immediately
+        automatic_email_processing_job(agent)
+
+        EMAIL_PROCESSING_STATUS["is_running"] = True
+        log_email_status("INFO", "Automatic email processing started")
+
+        # Start the scheduler in a separate thread
+        def run_scheduler():
+            while EMAIL_PROCESSING_STATUS["is_running"]:
+                schedule.run_pending()
+                time.sleep(1)
+
+        AUTO_EMAIL_PROCESSOR = threading.Thread(target=run_scheduler, daemon=True)
+        AUTO_EMAIL_PROCESSOR.start()
+
+        return "✅ Automatic email processing started! Will check for new emails every 5 minutes."
+
+    except Exception as e:
+        EMAIL_PROCESSING_STATUS["is_running"] = False
+        log_email_status("ERROR", f"Failed to start automatic processing: {str(e)}")
+        return f"❌ Failed to start automatic email processing: {str(e)}"
+
+def stop_automatic_email_processing():
+    """Stop automatic email processing"""
+    global EMAIL_PROCESSING_STATUS
+
+    if not EMAIL_PROCESSING_STATUS["is_running"]:
+        return "⚠️ Automatic email processing is not running"
+
+    try:
+        EMAIL_PROCESSING_STATUS["is_running"] = False
+        schedule.clear()
+        log_email_status("INFO", "Automatic email processing stopped")
+        return "✅ Automatic email processing stopped"
+
+    except Exception as e:
+        log_email_status("ERROR", f"Error stopping automatic processing: {str(e)}")
+        return f"❌ Error stopping automatic email processing: {str(e)}"
+
+def process_email_with_images(msg, agent, image_processor):
+    """Process a single email with image attachment support based on test.py pattern."""
+    import tempfile
+    import os
+
+    # Extract basic email info (following test.py pattern)
+    subject, encoding = decode_header(msg.get("Subject"))[0]
+    subject = subject.decode(encoding or "utf-8") if isinstance(subject, bytes) else subject
+    from_ = msg.get("From")
+    name, addr = parseaddr(from_)
+    email_date = msg.get("Date")
+    received_dt = parsedate_to_datetime(email_date).astimezone(IST)
+
+    # Extract email body (following test.py pattern)
+    body = ""
+    image_attachments = []
+
+    if msg.is_multipart():
+        for part in msg.walk():
+            content_type = part.get_content_type()
+            content_disposition = part.get("Content-Disposition", "")
+
+            # Extract text content
+            if content_type == "text/plain" and "attachment" not in content_disposition:
+                body = part.get_payload(decode=True).decode(errors="ignore")
+
+            # Extract image attachments
+            elif content_type.startswith("image/") and image_processor:
+                filename = part.get_filename()
+                if filename:
+                    try:
+                        # Save attachment to temporary file
+                        with tempfile.NamedTemporaryFile(delete=False, suffix=f"_{filename}") as temp_file:
+                            temp_file.write(part.get_payload(decode=True))
+                            temp_path = temp_file.name
+
+                        image_attachments.append({
+                            'filename': filename,
+                            'path': temp_path
+                        })
+                        print(f"📎 Found image attachment: {filename}")
+                    except Exception as e:
+                        print(f"❌ Error processing attachment {filename}: {e}")
+    else:
+        body = msg.get_payload(decode=True).decode(errors="ignore")
+
+    # Process images if any
+    image_analysis = ""
+    has_images = len(image_attachments) > 0
+
+    if image_attachments and image_processor:
+        print(f"🖼️ Processing {len(image_attachments)} image attachments...")
+
+        for attachment in image_attachments:
+            try:
+                # Process image with the image processor
+                image_result = image_processor.process_image(attachment['path'], model='mixtral-8x7b')
+
+                if image_result and image_result.get('has_useful_content'):
+                    metadata = image_result.get('metadata', {})
+
+                    # Add image analysis to description
+                    image_analysis += f"\n\n--- Image Analysis: {attachment['filename']} ---"
+
+                    # Add extracted text if available
+                    extracted_text = metadata.get('extracted_text', '')
+                    if extracted_text:
+                        image_analysis += f"\nExtracted Text: {extracted_text}"
+
+                    # Add error detection info
+                    if metadata.get('likely_error_screenshot'):
+                        image_analysis += "\n⚠️ Error Screenshot Detected"
+
+                    # Add technical keywords
+                    technical_analysis = metadata.get('technical_analysis', {})
+                    if technical_analysis:
+                        keywords = [item for sublist in technical_analysis.values() for item in sublist]
+                        if keywords:
+                            image_analysis += f"\nTechnical Keywords: {', '.join(keywords)}"
+
+                # Clean up temporary file
+                os.unlink(attachment['path'])
+
+            except Exception as e:
+                print(f"❌ Error processing image {attachment['filename']}: {e}")
+                try:
+                    os.unlink(attachment['path'])
+                except:
+                    pass
+
+    # Prepare full text for due date extraction
+    full_text = f"{subject}\n{body}{image_analysis}"
+
+    # Extract due date using NLP (following test.py pattern)
+    due_date = extract_due_date_nlp(full_text, received_dt)
+
+    # Enhanced description with image analysis
+    enhanced_description = body.strip()
+    if image_analysis:
+        enhanced_description += image_analysis
+
+    # Process ticket with agent (following test.py pattern)
+    try:
+        result = agent.process_new_ticket(
+            ticket_name=name or addr,
+            ticket_description=enhanced_description,
+            ticket_title=subject.strip(),
+            due_date=due_date,
+            priority_initial='High' if has_images else 'Medium',
+            user_email=addr  # Use sender's email for notifications
+        )
+
+        return {
+            'from': name or addr,
+            'subject': subject.strip(),
+            'due_date': due_date,
+            'has_images': has_images,
+            'image_count': len(image_attachments),
+            'ticket_number': result.get('ticket_number', 'N/A') if result else 'N/A'
+        }
+
+    except Exception as e:
+        print(f"❌ Error creating ticket: {e}")
+        return None
+
+def extract_due_date_nlp(text, received_dt):
+    """Extract due date from text using NLP (based on test.py implementation)."""
+    text = text.lower()
+
+    # 1. Custom Handling: "tomorrow"
+    if "tomorrow" in text:
+        result = received_dt + timedelta(days=1)
+        return result.strftime('%Y-%m-%d')
+
+    # 2. Custom Handling: "next <weekday>"
+    match_next_day = re.search(r'next\s+(monday|tuesday|wednesday|thursday|friday|saturday|sunday)', text)
+    if match_next_day:
+        weekday_str = match_next_day.group(1)
+        weekday_target = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].index(weekday_str)
+        days_ahead = (weekday_target - received_dt.weekday() + 7) % 7
+        days_ahead = 7 if days_ahead == 0 else days_ahead
+        result = received_dt + timedelta(days=days_ahead)
+        return result.strftime('%Y-%m-%d')
+
+    # 3. Custom Handling: "in 3 working days"
+    match_working = re.search(r'(?:in|within)\s+(\d{1,2})\s+working\s+days?', text)
+    if match_working:
+        days = int(match_working.group(1))
+        added = 0
+        current = received_dt
+        while added < days:
+            current += timedelta(days=1)
+            if current.weekday() < 5:
+                added += 1
+        return current.strftime('%Y-%m-%d')
+
+    # 4. Simple date patterns: "by 2025-07-05" or "due 05/07/2025"
+    date_patterns = [
+        r'(?:by|due|before)\s+(\d{4})-(\d{1,2})-(\d{1,2})',
+        r'(?:by|due|before)\s+(\d{1,2})[/-](\d{1,2})[/-](\d{4})'
+    ]
+
+    for pattern in date_patterns:
+        match = re.search(pattern, text, re.IGNORECASE)
+        if match:
+            try:
+                if len(match.group(1)) == 4:  # YYYY-MM-DD format
+                    year, month, day = map(int, match.groups())
+                else:  # DD/MM/YYYY format
+                    day, month, year = map(int, match.groups())
+
+                target_date = datetime(year, month, day, tzinfo=received_dt.tzinfo)
+                if target_date > received_dt:
+                    return target_date.strftime('%Y-%m-%d')
+            except (ValueError, TypeError):
+                continue
+
+    # 5. Regex: 'after 4-7-2025 and before 7-7-2025'
+    match_window = re.search(r'after\s+(\d{1,2})[-/](\d{1,2})[-/](\d{4})\s+and\s+before\s+(\d{1,2})[-/](\d{1,2})[-/](\d{4})', text)
+    if match_window:
+        d1, m1, y1, d2, m2, y2 = map(int, match_window.groups())
+        try:
+            start = datetime(y1, m1, d1, tzinfo=received_dt.tzinfo)
+            end = datetime(y2, m2, d2, tzinfo=received_dt.tzinfo)
+            mid = start + (end - start) / 2
+            return mid.strftime('%Y-%m-%d')
+        except:
+            pass
+
+    # 6. Final fallback: 48-hour default
+    fallback = received_dt + timedelta(hours=DEFAULT_DUE_OFFSET_HOURS)
+    return fallback.strftime('%Y-%m-%d')
 
 def main_page(agent, data_manager):
     """Main page with ticket submission form and quick stats using cached knowledgebase."""
@@ -188,6 +622,14 @@ def main_page(agent, data_manager):
                 st.markdown("### Basic Information")
                 ticket_name = st.text_input("Your Name*", placeholder="e.g., Jane Doe")
                 ticket_title = st.text_input("Ticket Title*", placeholder="e.g., Network drive inaccessible")
+                user_email = st.text_input("Your Email (Optional)", placeholder="e.g., jane.doe@company.com", help="Provide your email to receive a confirmation with resolution steps")
+
+                # Real-time email validation feedback
+                if user_email and user_email.strip():
+                    if validate_email(user_email):
+                        st.success("✅ Valid email format")
+                    else:
+                        st.error("❌ Invalid email format")
             with col2:
                 today = datetime.now().date()
                 due_date = st.date_input("Due Date", value=today + timedelta(days=7))
@@ -210,8 +652,13 @@ def main_page(agent, data_manager):
                 }
                 missing_fields = [field for field, value in required_fields.items() if not value]
 
+                # Validate email format if provided
+                email_valid = validate_email(user_email)
+
                 if missing_fields:
                     st.warning(f"⚠️ Please fill in all required fields: {', '.join(missing_fields)}")
+                elif not email_valid:
+                    st.error("⚠️ Please enter a valid email address or leave the email field empty.")
                 else:
                     # Check if agent is properly initialized
                     if agent is None:
@@ -230,21 +677,26 @@ def main_page(agent, data_manager):
                                     ticket_description=ticket_description,
                                     ticket_title=ticket_title,
                                     due_date=due_date.strftime("%Y-%m-%d"),
-                                    priority_initial=initial_priority
+                                    priority_initial=initial_priority,
+                                    user_email=user_email if user_email.strip() else None
                                 )
 
                                 if processed_ticket:
-                                    st.success("✅ Ticket processed, classified, and resolution generated successfully!")
+                                    ticket_number = processed_ticket.get('ticket_number', 'N/A')
+                                    st.success(f"✅ Ticket #{ticket_number} processed, classified, and resolution generated successfully!")
+                                    if user_email and user_email.strip():
+                                        st.info(f"📧 A confirmation email with resolution steps has been sent to {user_email}")
                                     classified_data = processed_ticket.get('classified_data', {})
                                     extracted_metadata = processed_ticket.get('extracted_metadata', {})
                                     resolution_note = processed_ticket.get('resolution_note', 'No resolution note generated')
 
                                     # Display ticket summary
                                     with st.expander("📋 Classified Ticket Summary", expanded=True):
-                                        cols = st.columns(3)
-                                        cols[0].metric("Issue Type", classified_data.get('ISSUETYPE', {}).get('Label', 'N/A'))
-                                        cols[1].metric("Type", classified_data.get('TICKETTYPE', {}).get('Label', 'N/A'))
-                                        cols[2].metric("Priority", classified_data.get('PRIORITY', {}).get('Label', 'N/A'))
+                                        cols = st.columns(4)
+                                        cols[0].metric("Ticket Number", f"#{ticket_number}")
+                                        cols[1].metric("Issue Type", classified_data.get('ISSUETYPE', {}).get('Label', 'N/A'))
+                                        cols[2].metric("Type", classified_data.get('TICKETTYPE', {}).get('Label', 'N/A'))
+                                        cols[3].metric("Priority", classified_data.get('PRIORITY', {}).get('Label', 'N/A'))
 
                                         st.markdown(f"""
                                         <div class="card">
@@ -305,12 +757,13 @@ def main_page(agent, data_manager):
                                     <div class="card" style="background-color: var(--accent);">
                                     <h4>Next Steps</h4>
                                     <ol>
-                                        <li>Your ticket has been assigned to the <b>{classified_data.get('ISSUETYPE', {}).get('Label', 'N/A')}</b> team</li>
+                                        <li>Your ticket <b>#{ticket_number}</b> has been assigned to the <b>{classified_data.get('ISSUETYPE', {}).get('Label', 'N/A')}</b> team</li>
                                         <li>A resolution note has been automatically generated based on similar historical tickets</li>
-                                        <li>You'll receive a confirmation email shortly with the resolution steps</li>
+                                        <li>{'You have received a confirmation email with the resolution steps' if user_email and user_email.strip() else 'Provide your email next time to receive confirmation emails with resolution steps'}</li>
                                         <li>A support specialist will contact you within 2 business hours</li>
                                         <li>Priority level: <b>{classified_data.get('PRIORITY', {}).get('Label', 'N/A')}</b> - Response time varies accordingly</li>
                                         <li>Try the suggested resolution steps above before escalating</li>
+                                        <li>Reference your ticket using number <b>#{ticket_number}</b> for all future communications</li>
                                     </ol>
                                     </div>
                                     """, unsafe_allow_html=True)
@@ -337,17 +790,123 @@ def main_page(agent, data_manager):
     </div>
     """, unsafe_allow_html=True)
 
-    # --- Email-to-ticket integration button ---
-    with st.expander("📧 Fetch and Process Support Emails", expanded=False):
-        if st.button("Fetch New Support Emails and Create Tickets", type="primary"):
-            with st.spinner("Checking support inbox and creating tickets..."):
+    # --- Email-to-ticket integration section ---
+    with st.expander("📧 Email Processing with Image Analysis", expanded=False):
+        st.markdown("""
+        **Enhanced Email Processing Features:**
+        - 📎 **Image Attachment Processing**: Automatically extracts text and metadata from screenshots
+        - 🔍 **Error Detection**: Identifies error dialogs and technical issues in images
+        - 🏷️ **Smart Classification**: Uses image content for better ticket categorization
+        - ⚡ **Priority Assignment**: Higher priority for tickets with error screenshots
+        - ⚡ **Real-Time Processing**: Only processes emails from last 5 minutes
+        - 🎯 **Intelligent Filtering**: Skips newsletters, promotions, and non-support emails
+        """)
+
+        # Automatic Email Processing Section
+        st.markdown("### 🔄 Automatic Email Processing")
+
+        col1, col2, col3 = st.columns([2, 2, 2])
+
+        with col1:
+            if st.button("🚀 Start Auto Processing", type="primary"):
+                with st.spinner("Starting automatic email processing..."):
+                    result = start_automatic_email_processing(agent)
+                    if "✅" in result:
+                        st.success(result)
+                    else:
+                        st.error(result)
+
+        with col2:
+            if st.button("🛑 Stop Auto Processing"):
+                result = stop_automatic_email_processing()
+                if "✅" in result:
+                    st.success(result)
+                else:
+                    st.warning(result)
+
+        with col3:
+            if st.button("🔄 Refresh Status"):
+                st.rerun()
+
+        # Status Display
+        st.markdown("### 📊 Auto Processing Status")
+        status_col1, status_col2, status_col3, status_col4 = st.columns(4)
+
+        with status_col1:
+            status_icon = "🟢" if EMAIL_PROCESSING_STATUS["is_running"] else "🔴"
+            st.metric("Status", f"{status_icon} {'Running' if EMAIL_PROCESSING_STATUS['is_running'] else 'Stopped'}")
+
+        with status_col2:
+            st.metric("Total Processed", EMAIL_PROCESSING_STATUS["total_processed"])
+
+        with status_col3:
+            st.metric("Errors", EMAIL_PROCESSING_STATUS["error_count"])
+
+        with status_col4:
+            last_processed = EMAIL_PROCESSING_STATUS["last_processed"] or "Never"
+            if last_processed != "Never":
+                last_processed = last_processed.split(" ")[1]  # Show only time
+            st.metric("Last Processed", last_processed)
+
+        # Recent Activity Log
+        if EMAIL_PROCESSING_STATUS["recent_logs"]:
+            st.markdown("### 📝 Recent Activity")
+            for log in EMAIL_PROCESSING_STATUS["recent_logs"][-5:]:  # Show last 5 logs
+                level_icon = {"INFO": "ℹ️", "SUCCESS": "✅", "ERROR": "❌"}.get(log["level"], "📝")
+                st.text(f"{level_icon} [{log['timestamp'].split(' ')[1]}] {log['message']}")
+
+        # Recently Auto-Processed Emails
+        if 'auto_processed_emails' in st.session_state and st.session_state.auto_processed_emails:
+            st.markdown("### 📧 Recently Auto-Processed Emails")
+            recent_emails = st.session_state.auto_processed_emails[-10:]  # Show last 10
+
+            for i, email_info in enumerate(recent_emails):
+                with st.container():
+                    col1, col2, col3 = st.columns([3, 2, 1])
+                    with col1:
+                        st.write(f"**{email_info.get('subject', 'No subject')}**")
+                        st.write(f"From: {email_info.get('from', 'Unknown')}")
+                        if email_info.get('ticket_number'):
+                            st.write(f"🎫 Ticket: #{email_info.get('ticket_number')}")
+                    with col2:
+                        st.write(f"Due: {email_info.get('due_date', 'N/A')}")
+                        if email_info.get('has_images'):
+                            st.write(f"🖼️ {email_info.get('image_count', 0)} images")
+                    with col3:
+                        if email_info.get('has_images'):
+                            st.success("📎 Images")
+                        else:
+                            st.info("📝 Text")
+
+        st.markdown("---")
+
+        # Manual Processing Section
+        st.markdown("### 🔧 Manual Email Processing")
+        if st.button("📧 Process Emails Now (Manual)", type="secondary"):
+            with st.spinner("Checking support inbox and processing emails with image analysis..."):
                 results = fetch_and_process_emails(agent)
                 if isinstance(results, str):
                     st.error(results)
                 elif results:
-                    st.success(f"Processed {len(results)} new email(s) into tickets.")
+                    st.success(f"✅ Processed {len(results)} new email(s) into tickets.")
+
+                    # Show detailed results
                     for r in results:
-                        st.write(f"- {r['from']}: {r['subject']} (Due: {r['due_date']})")
+                        col1, col2, col3 = st.columns([3, 2, 1])
+                        with col1:
+                            st.write(f"**{r['subject']}**")
+                            st.write(f"From: {r['from']}")
+                            if r.get('ticket_number'):
+                                st.write(f"🎫 Ticket: #{r.get('ticket_number')}")
+                        with col2:
+                            st.write(f"Due: {r['due_date']}")
+                            if r.get('has_images'):
+                                st.write(f"🖼️ {r.get('image_count', 0)} images processed")
+                        with col3:
+                            if r.get('has_images'):
+                                st.success("📎 Images")
+                            else:
+                                st.info("📝 Text only")
                 else:
                     st.info("No new support emails found.")
 
@@ -433,6 +992,33 @@ def filter_tickets_by_specific_date(kb_data, selected_date):
             continue
     return sorted(filtered, key=lambda x: x["date"] + x["time"], reverse=True)
 
+def search_tickets_by_number(kb_data, ticket_number):
+    """Search for tickets by ticket number or partial match"""
+    if not ticket_number or not ticket_number.strip():
+        return []
+
+    search_term = ticket_number.strip().upper()
+    filtered = []
+
+    for entry in kb_data:
+        t = entry['new_ticket']
+        ticket_num = t.get('ticket_number', '').upper()
+
+        # Check if ticket has a ticket number and it matches
+        if ticket_num and search_term in ticket_num:
+            filtered.append(t)
+        # Handle partial searches for new format (T20240916.0057)
+        elif ticket_num and search_term.replace('.', '') in ticket_num.replace('.', ''):
+            filtered.append(t)
+        # Handle partial searches for old format (TL-20240916-XXXX)
+        elif ticket_num and search_term.replace('-', '') in ticket_num.replace('-', ''):
+            filtered.append(t)
+        # Also search in title for backward compatibility
+        elif search_term in t.get('title', '').upper():
+            filtered.append(t)
+
+    return sorted(filtered, key=lambda x: x["date"] + x["time"], reverse=True)
+
 def recent_tickets_page(data_manager):
     """Dynamic recent tickets page with multiple filtering options (now optimized)"""
     kb_data = load_kb_data()
@@ -442,7 +1028,7 @@ def recent_tickets_page(data_manager):
             st.session_state.page = "main"
             st.rerun()
         st.title("🕑 Recent Raised Tickets")
-        tab1, tab2, tab3 = st.tabs(["⏰ Duration Filter", "📅 Date Range Filter", "📆 Specific Date Filter"])
+        tab1, tab2, tab3, tab4 = st.tabs(["⏰ Duration Filter", "📅 Date Range Filter", "📆 Specific Date Filter", "🔍 Search Tickets"])
         tickets_to_display = []
         filter_description = ""
         with tab1:
@@ -512,6 +1098,33 @@ def recent_tickets_page(data_manager):
             with col3:
                 preview_tickets = filter_tickets_by_specific_date(kb_data, specific_date)
                 st.metric("Tickets Found", len(preview_tickets))
+
+        with tab4:
+            st.markdown("### Search by Ticket Number or Title")
+            col1, col2, col3 = st.columns([2, 1, 1])
+            with col1:
+                search_query = st.text_input(
+                    "Search Query:",
+                    placeholder="e.g., T20250704.0057 or 'network issue'",
+                    key="search_query",
+                    help="Search by ticket number (e.g., T20250704.0057) or keywords in title"
+                )
+            with col2:
+                if st.button("🔍 Search", key="search_tickets"):
+                    if search_query and search_query.strip():
+                        tickets_to_display = search_tickets_by_number(kb_data, search_query)
+                        filter_description = f"🔍 Search: '{search_query}'"
+                        st.session_state.active_filter = "search"
+                        st.session_state.filter_description = filter_description
+                        st.session_state.tickets_to_display = tickets_to_display
+                    else:
+                        st.warning("Please enter a search query")
+            with col3:
+                if search_query and search_query.strip():
+                    preview_tickets = search_tickets_by_number(kb_data, search_query)
+                    st.metric("Tickets Found", len(preview_tickets))
+                else:
+                    st.metric("Tickets Found", 0)
         if 'tickets_to_display' in st.session_state and 'filter_description' in st.session_state:
             tickets_to_display = st.session_state.tickets_to_display
             filter_description = st.session_state.filter_description
@@ -586,6 +1199,7 @@ def recent_tickets_page(data_manager):
                 date_created = format_date_display(created_at)
                 # Construct id if missing
                 ticket_id = ticket.get('id') or (ticket.get('title', '') + ticket.get('date', '') + ticket.get('time', ''))
+                ticket_number = ticket.get('ticket_number', 'N/A')
 
                 # Special highlighting for critical/urgent tickets
                 is_urgent = (ticket.get('priority') in ['Critical', 'Desktop/User Down'] or
@@ -593,8 +1207,11 @@ def recent_tickets_page(data_manager):
 
                 expand_key = f"ticket_{ticket_id}_{i}"
 
+                # Display ticket number if available, otherwise use old format
+                display_title = f"#{ticket_number}" if ticket_number != 'N/A' else ticket_id
+
                 with st.expander(
-                    f"{'🔥' if is_urgent else '📋'} {ticket_id} - {ticket.get('title', '')} ({time_elapsed})",
+                    f"{'🔥' if is_urgent else '📋'} {display_title} - {ticket.get('title', '')} ({time_elapsed})",
                     expanded=False
                 ):
                     # Ticket header with date
@@ -605,6 +1222,9 @@ def recent_tickets_page(data_manager):
                         st.markdown(f"**⏰ Time Elapsed:** {time_elapsed}")
 
                     # Ticket details
+                    if ticket_number != 'N/A':
+                        st.markdown(f"**🎫 Ticket Number:** #{ticket_number}")
+
                     cols = st.columns([1, 1, 1, 1])
                     cols[0].markdown(f"**Category:** {ticket.get('category', 'General')}")
                     cols[1].markdown(f"**Priority:** {ticket.get('priority', 'Medium')}")
@@ -950,8 +1570,6 @@ def main():
 
     # Initialize agent
     agent = get_agent(SF_ACCOUNT, SF_USER, SF_PASSWORD, SF_WAREHOUSE, SF_DATABASE, SF_SCHEMA, SF_ROLE, SF_PASSCODE, DATA_REF_FILE)
-    # Fetch emails and create tickets on app startup (optional, can comment out if not desired)
-    fetch_and_process_emails(agent)
 
     # Initialize session state
     if "page" not in st.session_state:
