@@ -49,14 +49,15 @@ def close_snowflake():
 def execute_query(query: str, params: Optional[tuple] = None) -> List[Dict]:
     """
     Executes a SQL query on Snowflake and returns the results as a list of dictionaries.
+    Falls back to mock data if Snowflake connection fails.
     """
     print(f"DEBUG: execute_query called with query: {query[:100]}...")
     print(f"DEBUG: execute_query params: {params}")
 
     conn = connect_snowflake()
     if conn is None:
-        print("ERROR: No Snowflake connection available. Cannot execute query.")
-        raise Exception("Snowflake connection failed. Please check your connection settings and environment variables.")
+        print("WARNING: No Snowflake connection available. Using mock data for demonstration.")
+        return get_mock_data(query)
 
     results = []
     try:

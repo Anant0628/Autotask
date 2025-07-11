@@ -270,12 +270,6 @@ def create_sidebar():
         st.markdown(f"**Phone:** {SUPPORT_PHONE}")
         st.markdown(f"**Email:** {SUPPORT_EMAIL}")
 
-        # Logout button
-        st.markdown("---")
-        if st.button("🚪 Logout", key="logout_user", use_container_width=True):
-            st.session_state.current_role = None
-            st.rerun()
-
 def format_time_elapsed(created_at):
     """Calculate and format time elapsed"""
     try:

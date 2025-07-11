@@ -17,6 +17,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
 from src.ui.login import main as login_main
 from src.ui.Pages.User import main as user_main
 from src.ui.Pages.Technician import main as technician_main
+from src.ui.Pages.Admin import main as admin_main
 
 
 def main():
@@ -31,8 +32,11 @@ def main():
         # Run technician UI
         technician_main()
     elif st.session_state.current_role == "user":
-        # Run user UI  
+        # Run user UI
         user_main()
+    elif st.session_state.current_role == "admin":
+        # Run admin UI
+        admin_main()
     else:
         # Show login page
         login_main()

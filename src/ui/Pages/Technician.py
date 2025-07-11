@@ -347,12 +347,6 @@ def create_technician_sidebar():
         st.markdown(f"**Phone:** {SUPPORT_PHONE}")
         st.markdown(f"**Email:** {SUPPORT_EMAIL}")
 
-        # Logout button
-        st.markdown("---")
-        if st.button("🚪 Logout", key="logout_technician", use_container_width=True):
-            st.session_state.current_role = None
-            st.rerun()
-
 def generate_technician_tickets(tech_id="TECH-001", count=25):
     """Generate mock tickets assigned to technician with enhanced details"""
     
