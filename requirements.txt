@@ -1,0 +1,16 @@
+# Image Processing Dependencies
+Pillow>=9.0.0
+pytesseract>=0.3.10
+opencv-python>=4.5.0
+numpy>=1.21.0
+
+# Automatic Processing Dependencies
+schedule>=1.2.0
+streamlit
+pandas
+plotly
+pytz
+schedule
+snowflake-connector-python
+dotenv
+scikit-learn  

@@ -1,0 +1,2942 @@
+{
+  "Employees": {
+    "Employee": [
+      {
+        "Field": "creatortype",
+        "Value": "1",
+        "Label": "Resource",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "creatortype",
+        "Value": "2",
+        "Label": "Contact",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "issuetype",
+        "Value": "4",
+        "Label": "Hardware",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "issuetype",
+        "Value": "5",
+        "Label": "Software/SaaS",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "issuetype",
+        "Value": "6",
+        "Label": "Network",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "issuetype",
+        "Value": "7",
+        "Label": "Assessment",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "issuetype",
+        "Value": "8",
+        "Label": "Server",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "issuetype",
+        "Value": "9",
+        "Label": "Active Directory",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "issuetype",
+        "Value": "10",
+        "Label": "Telephony",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "issuetype",
+        "Value": "11",
+        "Label": "Cloud Workspace",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "issuetype",
+        "Value": "12",
+        "Label": "Apple",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "issuetype",
+        "Value": "13",
+        "Label": "Backup",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "issuetype",
+        "Value": "14",
+        "Label": "Cybersecurity Intrusion",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "issuetype",
+        "Value": "15",
+        "Label": "Email",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "issuetype",
+        "Value": "16",
+        "Label": "OS",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "issuetype",
+        "Value": "17",
+        "Label": "Other",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "issuetype",
+        "Value": "18",
+        "Label": "Printer",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "issuetype",
+        "Value": "19",
+        "Label": "Sales",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "issuetype",
+        "Value": "20",
+        "Label": "Windows",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "issuetype",
+        "Value": "21",
+        "Label": "Administration",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "issuetype",
+        "Value": "22",
+        "Label": "Triage",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "issuetype",
+        "Value": "23",
+        "Label": "User Admin",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "issuetype",
+        "Value": "25",
+        "Label": "Threat Protection",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "issuetype",
+        "Value": "26",
+        "Label": "Business Continuity",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "lastactivitypersontype",
+        "Value": "1",
+        "Label": "Resource",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "lastactivitypersontype",
+        "Value": "2",
+        "Label": "Contact",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "priority",
+        "Value": "1",
+        "Label": "High",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "priority",
+        "Value": "2",
+        "Label": "Medium",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "priority",
+        "Value": "3",
+        "Label": "Low",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "priority",
+        "Value": "4",
+        "Label": "Critical",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "priority",
+        "Value": "5",
+        "Label": "Desktop/User Down",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "queueid",
+        "Value": "5",
+        "Label": "Client Portal",
+        "": "",
+        "\r": "QUEUEID determines which support team handles the ticket\r"
+      },
+      {
+        "Field": "queueid",
+        "Value": "6",
+        "Label": "Post Sale",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "queueid",
+        "Value": "8",
+        "Label": "Do Not Use",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "queueid",
+        "Value": "14046773",
+        "Label": "Tier 1",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "queueid",
+        "Value": "29682824",
+        "Label": "Monitoring",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "queueid",
+        "Value": "29682858",
+        "Label": "Triage",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "queueid",
+        "Value": "29682859",
+        "Label": "Tier III",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "queueid",
+        "Value": "29682863",
+        "Label": "GMS Helpdesk",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "queueid",
+        "Value": "29682864",
+        "Label": "Escalation Team",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "queueid",
+        "Value": "29682865",
+        "Label": "Support Desk Team",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "queueid",
+        "Value": "29682867",
+        "Label": "Sales",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "queueid",
+        "Value": "29682869",
+        "Label": "Administration",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "queueid",
+        "Value": "29682875",
+        "Label": "Spam",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "queueid",
+        "Value": "29682877",
+        "Label": "Business Operations",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "queueid",
+        "Value": "29682879",
+        "Label": "HDSS",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "queueid",
+        "Value": "29682881",
+        "Label": "Merged",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "queueid",
+        "Value": "29682882",
+        "Label": "Mission Control",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "servicelevelagreementid",
+        "Value": "1",
+        "Label": "Standard",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "source",
+        "Value": "-2",
+        "Label": "Insourced",
+        "": "",
+        "\r": "SOURCE�indicates how the ticket was created\r"
+      },
+      {
+        "Field": "source",
+        "Value": "-1",
+        "Label": "Client Portal",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "source",
+        "Value": "1",
+        "Label": "Other",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "source",
+        "Value": "2",
+        "Label": "Call",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "source",
+        "Value": "3",
+        "Label": "Voice Mail",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "source",
+        "Value": "4",
+        "Label": "Email",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "source",
+        "Value": "6",
+        "Label": "Verbal",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "source",
+        "Value": "13",
+        "Label": "Central Management",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "source",
+        "Value": "14",
+        "Label": "Sophos Central",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "1",
+        "Label": "New",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "5",
+        "Label": "Complete",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "7",
+        "Label": "Waiting Customer",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "8",
+        "Label": "Response Received",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "10",
+        "Label": "Scheduled",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "12",
+        "Label": "Help Desk",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "13",
+        "Label": "Follow Up",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "14",
+        "Label": "Waiting Parts",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "15",
+        "Label": "In Progress",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "16",
+        "Label": "Waiting Vendor",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "17",
+        "Label": "Waiting Customer 2",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "19",
+        "Label": "Waiting Customer 1",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "21",
+        "Label": "End User Contacted",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "22",
+        "Label": "Pending End User Confirm",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "23",
+        "Label": "Update for Helpdesk",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "24",
+        "Label": "Escalated Level3 Required",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "25",
+        "Label": "Dispatch – Docs Required",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "26",
+        "Label": "Dispatch – Tools Unavail",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "27",
+        "Label": "Beyond Helpdesk Scope",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "28",
+        "Label": "Scheduled: Onsite",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "29",
+        "Label": "Client Non-Responsive",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "30",
+        "Label": "Helpdesk Steps Complete",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "31",
+        "Label": "Level 3 Take Back",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "32",
+        "Label": "Dispatch – Level3 Process",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "33",
+        "Label": "Assigned",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "35",
+        "Label": "Email End User Custom",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "36",
+        "Label": "Auto-Close No Feedback",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "38",
+        "Label": "Follow-Up Required",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "39",
+        "Label": "Scheduled: Remote",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "40",
+        "Label": "Escalated - CS Lead",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "41",
+        "Label": "Escalated - Engineering",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "42",
+        "Label": "Escalated - Next Level",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "43",
+        "Label": "Escalated - GMS",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "44",
+        "Label": "Escalated - Sales",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "45",
+        "Label": "Escalated - CS Manager",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "46",
+        "Label": "Task Pending",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "47",
+        "Label": "Task Complete",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "49",
+        "Label": "Waiting Approval",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "50",
+        "Label": "Escalated - Triage I",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "51",
+        "Label": "Escalated - Triage II",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "52",
+        "Label": "Resolved",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "53",
+        "Label": "Proof of Concept",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "54",
+        "Label": "Escalation Required",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "55",
+        "Label": "Escalate from MC",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "56",
+        "Label": "MC - Needs Info",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "57",
+        "Label": "MC - Out of Scope",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "status",
+        "Value": "58",
+        "Label": "Escalate to MC",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "11",
+        "Label": "Equipment Move",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "12",
+        "Label": "Keyboard/Mouse",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "13",
+        "Label": "Laptop",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "14",
+        "Label": "Monitor(s)",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "19",
+        "Label": "Cabling",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "20",
+        "Label": "VPN",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "21",
+        "Label": "Wireless",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "23",
+        "Label": "Migrate",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "24",
+        "Label": "Provision",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "25",
+        "Label": "Other",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "26",
+        "Label": "z",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "27",
+        "Label": "Security",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "28",
+        "Label": "Comprehensive",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "29",
+        "Label": "Network",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "30",
+        "Label": "Inventory",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "31",
+        "Label": "Other",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "32",
+        "Label": "Performance",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "33",
+        "Label": "Workstation/Server",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "34",
+        "Label": "Data Backup",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "35",
+        "Label": "\"Cloud Storage (SharePoint",
+        "": " OneDrive",
+        "\r": " etc.)\""
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "36",
+        "Label": "Business Line Application",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "37",
+        "Label": "Chrome",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "38",
+        "Label": "Edge/IE",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "39",
+        "Label": "Adobe",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "40",
+        "Label": "AV/Anti-Spyware",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "41",
+        "Label": "Browser",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "42",
+        "Label": "z",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "43",
+        "Label": "Other",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "44",
+        "Label": "z",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "45",
+        "Label": "Printer",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "46",
+        "Label": "Wipe and Restore",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "47",
+        "Label": "Other",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "48",
+        "Label": "Workstation",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "49",
+        "Label": "AD Profile Change",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "50",
+        "Label": "New Hire",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "51",
+        "Label": "File Permissions",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "52",
+        "Label": "Offboarding Request",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "53",
+        "Label": "Other",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "54",
+        "Label": "Mobile",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "55",
+        "Label": "Phone Issue",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "56",
+        "Label": "z",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "57",
+        "Label": "Voicemail (Setup/Password Reset)",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "58",
+        "Label": "Other",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "59",
+        "Label": "New User Account",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "60",
+        "Label": "Remove User Account",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "61",
+        "Label": "Locked Account",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "62",
+        "Label": "Service Applications",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "63",
+        "Label": "Other",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "64",
+        "Label": "Connectivity/Outages",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "65",
+        "Label": "Unable to Login/ Password Reset",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "66",
+        "Label": "Account Locked Out",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "67",
+        "Label": "Password Reset",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "68",
+        "Label": "Email",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "69",
+        "Label": "Hardware",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "70",
+        "Label": "iPhone",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "71",
+        "Label": "iPod/iPad",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "72",
+        "Label": "Mapped Drives",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "73",
+        "Label": "MS Office",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "74",
+        "Label": "Network/RDP",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "75",
+        "Label": "Other",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "76",
+        "Label": "Password/Keychain",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "77",
+        "Label": "Performance",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "78",
+        "Label": "Print/Scan",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "79",
+        "Label": "Backup Failed",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "80",
+        "Label": "Change/Configure",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "81",
+        "Label": "Check-in/Offline",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "82",
+        "Label": "Hardware Issue",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "83",
+        "Label": "New Setup",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "84",
+        "Label": "Other",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "85",
+        "Label": "Restore",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "86",
+        "Label": "Screenshot",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "87",
+        "Label": "Space Limitations",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "88",
+        "Label": "SystemWatch",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "89",
+        "Label": "Compromised Credentials",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "90",
+        "Label": "Denial-of-Service Attack",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "91",
+        "Label": "Malware Attack",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "92",
+        "Label": "Phishing Attack",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "93",
+        "Label": "Virus",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "94",
+        "Label": "Other",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "95",
+        "Label": "Firefox",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "96",
+        "Label": "Email",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "97",
+        "Label": "\"MS Office Apps (Excel",
+        "": " Word",
+        "\r": " etc.)\""
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "98",
+        "Label": "QuickBooks",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "99",
+        "Label": "Other",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "100",
+        "Label": "Alert",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "101",
+        "Label": "Email Signature",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "102",
+        "Label": "Configure/Fix",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "103",
+        "Label": "Contacts",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "104",
+        "Label": "Mailbox Permissions",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "105",
+        "Label": "Mobile Device",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "106",
+        "Label": "Outlook Setup",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "107",
+        "Label": "Other",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "108",
+        "Label": "Calendar",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "109",
+        "Label": "Spam",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "110",
+        "Label": "Password Reset",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "111",
+        "Label": "Disk Space",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "112",
+        "Label": "Firewall",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "113",
+        "Label": "Switch",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "114",
+        "Label": "New Workstation Setup",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "115",
+        "Label": "Server",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "116",
+        "Label": "Access Point",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "117",
+        "Label": "Linux",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "118",
+        "Label": "MacOS",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "119",
+        "Label": "Mac OS X",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "120",
+        "Label": "Windows 7",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "121",
+        "Label": "Windows",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "124",
+        "Label": "Windows 2008",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "126",
+        "Label": "Other",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "127",
+        "Label": "Firewall",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "128",
+        "Label": "WAN",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "129",
+        "Label": "Mapped Drives",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "130",
+        "Label": "Outage",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "131",
+        "Label": "RDP",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "132",
+        "Label": "Switch",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "133",
+        "Label": "Other",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "134",
+        "Label": "Change/Configure",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "135",
+        "Label": "New Setup",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "136",
+        "Label": "Printing Issue",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "137",
+        "Label": "Scanning Issue",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "138",
+        "Label": "Hardware",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "139",
+        "Label": "Infrastructure",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "140",
+        "Label": "Licenses",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "141",
+        "Label": "Other",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "142",
+        "Label": "Services",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "143",
+        "Label": "Fax",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "144",
+        "Label": "Mapped Drives",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "145",
+        "Label": "MS Office",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "146",
+        "Label": "Network/RDP",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "147",
+        "Label": "Other",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "148",
+        "Label": "Password/Keychain",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "149",
+        "Label": "Performance",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "150",
+        "Label": "Print/Scan",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "151",
+        "Label": "Monitoring Report",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "152",
+        "Label": "Allowed List Request",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "153",
+        "Label": "Printing/ThinPrint",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "154",
+        "Label": "SSL Certifications",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "155",
+        "Label": "\"Conferencing (Zoom",
+        "": " Teams",
+        "\r": " etc.)\""
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "156",
+        "Label": "Setup/ Config",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "157",
+        "Label": "General Break/Fix",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "158",
+        "Label": "New Application Download Request",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "159",
+        "Label": "Storage/ Performance Alerts",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "160",
+        "Label": "Alert",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "161",
+        "Label": "Distribution Group Add/ Change",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "162",
+        "Label": "Report",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "163",
+        "Label": "Process Change",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "164",
+        "Label": "Other",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "165",
+        "Label": "Internal Request",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "166",
+        "Label": "Camera/Webcam",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "167",
+        "Label": "Docking System",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "168",
+        "Label": "Speakers/Headset",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "169",
+        "Label": "Other",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "170",
+        "Label": "IT Glue",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "171",
+        "Label": "HIPAA",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "172",
+        "Label": "Compliance",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "173",
+        "Label": "CRM",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "174",
+        "Label": "Google Workspace",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "175",
+        "Label": "Ink",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "176",
+        "Label": "Driver",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "177",
+        "Label": "Other",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "178",
+        "Label": "Auto Attendant/Call Routing",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "179",
+        "Label": "Hardware Request",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "180",
+        "Label": "New Extension",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "181",
+        "Label": "VOIP Connection/Latency",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "182",
+        "Label": "Other",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "183",
+        "Label": "Billing",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "184",
+        "Label": "Technology Business Review",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "185",
+        "Label": "New Hire (VDI)",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "186",
+        "Label": "File Recovery",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "187",
+        "Label": "Email Recovery",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "188",
+        "Label": "Contact Update",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "189",
+        "Label": "Licensing",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "190",
+        "Label": "Multifactor Authentication",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "191",
+        "Label": "Offboarding",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "192",
+        "Label": "Onboarding",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "193",
+        "Label": "Password Reset",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "194",
+        "Label": "Permissions",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "195",
+        "Label": "Other",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "196",
+        "Label": "Bridge",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "197",
+        "Label": "DHCP",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "198",
+        "Label": "DNS",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "199",
+        "Label": "LAN",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "200",
+        "Label": "Modem",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "201",
+        "Label": "Windows Server",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "202",
+        "Label": "Android",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "203",
+        "Label": "SSL Certificate",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "204",
+        "Label": "DNS",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "205",
+        "Label": "Driver",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "206",
+        "Label": "FSLogix",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "207",
+        "Label": "Group Policy",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "208",
+        "Label": "iOS/iPadOS",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "209",
+        "Label": "Mapped Drive",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "210",
+        "Label": "Print Management",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "211",
+        "Label": "Remote Desktop",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "212",
+        "Label": "File Share",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "213",
+        "Label": "Box",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "214",
+        "Label": "Citrix",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "215",
+        "Label": "Dell Command Update",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "216",
+        "Label": "Dropbox",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "217",
+        "Label": "FortiVPN",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "218",
+        "Label": "Google Chrome",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "219",
+        "Label": "Kaseya VSA",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "220",
+        "Label": "LastPass",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "221",
+        "Label": "Loom",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "222",
+        "Label": "MaaS360",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "223",
+        "Label": "Microsoft Dynamics",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "224",
+        "Label": "Microsoft Edge",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "225",
+        "Label": "Microsoft Excel",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "226",
+        "Label": "Microsoft Internet Explorer",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "227",
+        "Label": "Microsoft Intune",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "228",
+        "Label": "Microsoft OneDrive",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "229",
+        "Label": "Microsoft Outlook",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "230",
+        "Label": "Microsoft PowerPoint",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "231",
+        "Label": "Microsoft SharePoint",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "232",
+        "Label": "Microsoft Teams",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "233",
+        "Label": "Microsoft Word",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "234",
+        "Label": "Native Android App",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "235",
+        "Label": "Native Windows App",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "236",
+        "Label": "Native iOS/iPadOS App",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "237",
+        "Label": "Native Linux App",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "238",
+        "Label": "Native MacOS App",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "239",
+        "Label": "NetApp",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "240",
+        "Label": "NordLayer",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "241",
+        "Label": "Opera",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "242",
+        "Label": "QuoteMonkey",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "243",
+        "Label": "RingCentral",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "244",
+        "Label": "Sage",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "245",
+        "Label": "Slack",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "246",
+        "Label": "Sophos VPN Client",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "247",
+        "Label": "Switchvox",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "248",
+        "Label": "Teramind",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "249",
+        "Label": "VLC",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "250",
+        "Label": "WebEx",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "251",
+        "Label": "Zoom",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "252",
+        "Label": "8x8",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "253",
+        "Label": "ActivTrack",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "254",
+        "Label": "Entra Connect",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "255",
+        "Label": "Adobe Acrobat",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "256",
+        "Label": "Adobe Reader",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "257",
+        "Label": "1Password",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "258",
+        "Label": "Applied Epic",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "259",
+        "Label": "Azure Virtual Desktop",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "260",
+        "Label": "Azure Virtual Desktop Client",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "261",
+        "Label": "Bluebeam Revu",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "262",
+        "Label": "Microsoft Exchange",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "263",
+        "Label": "AppRiver Email Threat Protection",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "264",
+        "Label": "Avast!",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "265",
+        "Label": "BitDefender",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "266",
+        "Label": "BlackPoint",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "267",
+        "Label": "Crowdstrike",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "268",
+        "Label": "Cylance",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "269",
+        "Label": "FortiClient",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "270",
+        "Label": "FortiMail",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "271",
+        "Label": "Huntress",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "272",
+        "Label": "Malwarebytes",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "273",
+        "Label": "McAfee",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "274",
+        "Label": "Microsoft Defender",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "275",
+        "Label": "Microsoft Defender for Azure",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "276",
+        "Label": "Norton Antivirus",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "277",
+        "Label": "Sophos Email Security",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "278",
+        "Label": "Sophos Endpoint Protection",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "279",
+        "Label": "Sophos Phishing Simulation",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "280",
+        "Label": "Webroot",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "281",
+        "Label": "Other",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "282",
+        "Label": "Configuration",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "283",
+        "Label": "Restore - File",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "284",
+        "Label": "Restore - Server",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "285",
+        "Label": "Restore - Share",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "286",
+        "Label": "Restore - Test",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "287",
+        "Label": "SaaS - Acronis",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "288",
+        "Label": "SaaS - AppRiver",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "289",
+        "Label": "SaaS - Datto",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "290",
+        "Label": "SaaS - Veeam",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "291",
+        "Label": "Troubleshooting",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "292",
+        "Label": "Other",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "293",
+        "Label": "VoIP Handset",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "294",
+        "Label": "VoIP System",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "295",
+        "Label": "Scanner",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "296",
+        "Label": "UPS",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "297",
+        "Label": "Peripheral",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "298",
+        "Label": "Microsoft Access",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "299",
+        "Label": "Proofpoint",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "300",
+        "Label": "DarkWeb ID",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "301",
+        "Label": "Bitwarden",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "302",
+        "Label": "NinjaRMM",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "303",
+        "Label": "Nextiva",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "304",
+        "Label": "Onboarding",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "305",
+        "Label": "Offboarding",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "306",
+        "Label": "Autotask",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "307",
+        "Label": "Carbon Black",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "310",
+        "Label": "Microsoft Entra",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "311",
+        "Label": "Microsoft Power BI",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "312",
+        "Label": "Microsoft Power Apps",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "313",
+        "Label": "SIP Phone",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "314",
+        "Label": "Telephony",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "315",
+        "Label": "Impersonation",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "subissuetype",
+        "Value": "316",
+        "Label": "Sophos MDR",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "ticketcategory",
+        "Value": "1",
+        "Label": "Standard (non-editable)",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "ticketcategory",
+        "Value": "2",
+        "Label": "AEM Alert",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "ticketcategory",
+        "Value": "3",
+        "Label": "Standard",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "ticketcategory",
+        "Value": "4",
+        "Label": "Datto Alert",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "ticketcategory",
+        "Value": "5",
+        "Label": "RMA",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "ticketcategory",
+        "Value": "6",
+        "Label": "Datto Networking Alert",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "ticketcategory",
+        "Value": "101",
+        "Label": "Projects",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "ticketcategory",
+        "Value": "102",
+        "Label": "Administration",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "ticketcategory",
+        "Value": "103",
+        "Label": "Device Alert",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "ticketcategory",
+        "Value": "104",
+        "Label": "Co-Managed",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "ticketcategory",
+        "Value": "107",
+        "Label": "NinjaRMM",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "ticketcategory",
+        "Value": "108",
+        "Label": "Recording & Measurements",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "ticketcategory",
+        "Value": "109",
+        "Label": "Opportunity",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "tickettype",
+        "Value": "1",
+        "Label": "Service Request",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "tickettype",
+        "Value": "2",
+        "Label": "Incident",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "tickettype",
+        "Value": "3",
+        "Label": "Problem",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "tickettype",
+        "Value": "4",
+        "Label": "Change Request",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": "tickettype",
+        "Value": "5",
+        "Label": "Alert",
+        "": "",
+        "\r": "\r"
+      },
+      {
+        "Field": ""
+      }
+    ]
+  }
+}

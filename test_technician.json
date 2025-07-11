@@ -1,0 +1,10 @@
+{
+    "technician_id": "T115",
+    "name": "John Smith",
+    "email": "john.smith@company.com",
+    "role": "Senior Technician",
+    "skills": "Windows, Linux, Network Troubleshooting, Hardware Repair",
+    "availability_status": "Available",
+    "current_workload": "3",
+    "specializations": "Desktop Support, Network Infrastructure"
+}
